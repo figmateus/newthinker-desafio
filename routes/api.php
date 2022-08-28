@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('api/uf', UfController::class, '')
+Route::get('uf', [UfController::class, 'index']);
+Route::get('uf/{id}', [UfController::class, 'show']);
+Route::post('uf',[UfController::class, 'store']);
