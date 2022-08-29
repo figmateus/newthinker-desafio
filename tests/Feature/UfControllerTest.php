@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 use App\Models\Uf;
@@ -11,7 +10,7 @@ use App\Models\Uf;
 class UfControllerTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_get_uf_endpoint_without_filter()
+    public function testGetUfEndpointWithoutFilter()
     {
         $ufs = Uf::factory(1)->create();
 
@@ -39,11 +38,17 @@ class UfControllerTest extends TestCase
         });
     }
 
-    public function test_get_uf_endpoint_with_filter()
+    public function testGetUfEndpointShouldReturnEmptyJsonWhenDontFoundUf()
+    {
+        $response = $this->getJson('/api/uf?nome=IT');
+        $response->assertJson([]);
+    }
+
+    public function testGetUfEndpointWithFilter()
     {
         $uf = Uf::factory(1)->createOne();
 
-        $response = $this->getJson('/api/uf/' . $uf->codigo_uf);
+        $response = $this->getJson('/api/uf?nome=' . $uf->nome);
         $response->assertStatus(200);
 
         $response->assertJson(function (AssertableJson $json) use ($uf){
@@ -66,7 +71,7 @@ class UfControllerTest extends TestCase
         });
     }
 
-    public function test_post_uf_endpoint()
+    public function testPostUfEndpoint()
     {
         $uf = Uf::factory(1)->makeOne()->toArray();
 
@@ -84,5 +89,48 @@ class UfControllerTest extends TestCase
                 'status' => $uf['status'],
             ]);
         });
+    }
+
+    public function testPutUfEndpoint()
+    {
+        $uf = Uf::factory(1)->createOne();
+
+        $payload = [
+                'sigla' => "BA",
+                'nome' =>"BAHIA UPDATE",
+                'status' => 1
+        ];
+
+        $response = $this->putJson('/api/uf/'. $uf->codigo_uf, $payload);
+
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($payload){
+
+            $json->hasAll(['codigo_uf', 'sigla', 'nome', 'status']);
+
+            $json->whereAll([
+                'sigla' => $payload['sigla'],
+                'nome' => $payload['nome'],
+                'status' => $payload['status'],
+            ]);
+        });
+    }
+
+    public function testPutUfShouldReturnEmptyJsonWhenDontUpdateUf()
+    {
+        $uf = Uf::factory(1)->createOne();
+
+        $payload = [
+            'sigla' => "BA",
+            'nome' =>"BAHIA UPDATE",
+            'status' => 1
+        ];
+
+        $response = $this->putJson('/api/uf/4', $payload);
+
+        $response->assertStatus(400);
+
+        $response->assertJson(['mensagem' => 'Não foi possível alterar, pois já existe um registro de UF com a mesma sigla cadastrada.']);
     }
 }

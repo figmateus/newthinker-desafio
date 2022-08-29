@@ -7,58 +7,82 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Desafio
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p>Construiremos unicamente uma aplicação backend de cadastro de endereços. Trabalharemos com cadastro de UF, MUNICÍPIO, BAIRRO e PESSOA. Iremos permitir o cadastro de vários endereços para uma pessoa.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Para facilitar, deixamos o script de criação de banco, solicitamos que usem Postgresql. 
+Teremos as tabelas de UF (tb_uf), Município (tb_municipio), Bairro (tb_bairro), Endereço (tb_endereco) e Pessoa (tb_pessoa), lembrando que o cadastro na tabela de endereços será feito no endpoint de pessoa. 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+GET - obrigatório<br>
+POST - obrigatório<br>
+PUT - obrigatório<br>
+DELETE - opcional:
 
-## Learning Laravel
+    Pode fazer apenas alterando um status de 1 (ativo) para 2 (inativo)
+    Pode fazer deletando um registro, mas neste caso precisa ser com deleção em cascata, por exemplo: Ao excluir um Município, excluir também os bairros, desde que não tenha alguma pessoa com endereço que esteja vinculado ao Município.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Todas as respostas deverão retornar status 200 se deu certo e um status diferente de 200 se algo deu errado.
+As mensagens de erro devem vir sempre em português.
 
-## Laravel Sponsors
+O projeto deverá ser desenvolvido com Laravel, utilizando principalmente os seguintes itens do framework:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    Eloquent ORM (https://laravel.com/docs/9.x/eloquent)
+    Validação dos dados da Requisição (https://laravel.com/docs/9.x/validation)
+    Tratamento de erros (https://laravel.com/docs/9.x/errors)
 
-### Premium Partners
+Além disso é necessário que a API seja documentada com Swagger (Exemplo: https://blog.quickadminpanel.com/laravel-api-documentation-with-openapiswagger/)</p>
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
 
-## Contributing
+## Feramentas usada e metodo de desenvolvimento 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**laravel sail**
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+<p>
+O Laravel Sail é uma interface de linha de comando leve 
+(assim como o artisan) e simples de usar. Seu foco é 
+abstrair todo o uso do Docker para que seja mais simples 
+durante o dia a dia.</p>
 
-## Security Vulnerabilities
+**TDD (Test Driven Development)**
+<p>
+Todo o projeto foi desenvolvido utilizando TDD, que basicamente é o desenvolvimento orientado a testes 
+garantindo assim um codigo mais seguro e com todos os testes necessários. 
+</p>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## como instalar o projeto
 
-## License
+**Primeiro Clone o projeto**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+    git clone https://github.com/figmateus/newthinker-desafio.git
+```
+
+**Copie o arquivo .env**
+```
+ cp .env.example .env
+ ```
+
+ **Rode os comandos**
+```
+ composer update
+ ./vendor/bin/sail build
+ php artisan sail:install
+ npm install 
+ ./vendor/bin/sail artisan key:generate
+ ```
+
+ **Configure o arquivo .env**
+    <p align="start"><img src="envnewthinker.png" width="200"/></a></p>
+
+ **Inicie o container**
+ ```
+ ./vendor/bin/sail up
+ ```
+
+**Rode os testes**
+ ```
+ sail artisan test
+ ```

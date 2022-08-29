@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('uf', [UfController::class, 'index']);
-Route::get('uf/{id}', [UfController::class, 'show']);
 Route::post('uf',[UfController::class, 'store']);
+Route::put('uf/{codigoUF}', [UfController::class, 'update']);
