@@ -27,19 +27,15 @@ class UfRepository
 
     public function FilterByCodigoAndName($data)
     {
-        return DB::table('tb_uf')
-            ->where('codigo_uf', $data['codigoUF'])
-            ->where('nome', $data['nome'])
-            ->get();
+        return Uf::whereCodgio_uf($data['codigoUF'])
+            ->whereNome($data['nome'])->first();
     }
 
     public function FilterByCodigoNameAndFilter($data)
     {
-        return DB::table('tb_uf')
-        ->where('codigo_uf', $data['codigoUF'])
-        ->where('nome', $data['nome'])
-        ->where('sigla', $data['sigla'])
-        ->get();
+        return Uf::whereCodgio_uf($data['codigoUF'])
+            ->whereNome($data['nome'])
+            ->whereSigla($data['sigla'])->first();
     }
 
     public function updateUf($codigoUF, $body)

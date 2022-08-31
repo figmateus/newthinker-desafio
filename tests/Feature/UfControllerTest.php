@@ -44,11 +44,65 @@ class UfControllerTest extends TestCase
         $response->assertJson([]);
     }
 
-    public function testGetUfEndpointWithFilter()
+    public function testGetUfEndpointWithFilterByName()
     {
         $uf = Uf::factory(1)->createOne();
 
         $response = $this->getJson('/api/uf?nome=' . $uf->nome);
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($uf){
+
+            $json->hasAll(['codigo_uf','sigla', 'nome', 'status']);
+
+            $json->whereAllType([
+                'codigo_uf' => 'integer',
+                'sigla'=>'string',
+                'nome'=>'string',
+                'status'=>'boolean',
+            ]);
+
+            $json->whereAll([
+                'codigo_uf' => $uf->codigo_uf,
+                'sigla'=> $uf->sigla,
+                'nome'=> $uf->nome,
+                'status' => $uf->status,
+            ]);
+        });
+    }
+
+    public function testGetUfEndpointWithFilterBySigla()
+    {
+        $uf = Uf::factory(1)->createOne();
+
+        $response = $this->getJson('/api/uf?sigla=' . $uf->sigla);
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($uf){
+
+            $json->hasAll(['codigo_uf','sigla', 'nome', 'status']);
+
+            $json->whereAllType([
+                'codigo_uf' => 'integer',
+                'sigla'=>'string',
+                'nome'=>'string',
+                'status'=>'boolean',
+            ]);
+
+            $json->whereAll([
+                'codigo_uf' => $uf->codigo_uf,
+                'sigla'=> $uf->sigla,
+                'nome'=> $uf->nome,
+                'status' => $uf->status,
+            ]);
+        });
+    }
+
+    public function testGetUfEndpointWithFilterByCodigoAndName()
+    {
+        $uf = Uf::factory(1)->createOne();
+
+        $response = $this->getJson('/api/uf?codigoUF='.$uf->codigo_uf.'&nome='.$uf->nome);
         $response->assertStatus(200);
 
         $response->assertJson(function (AssertableJson $json) use ($uf){
