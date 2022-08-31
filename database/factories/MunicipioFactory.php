@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Uf;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class MunicipioFactory extends Factory
      */
     public function definition()
     {
+        $uf = Uf::factory(1)->create();
+
         return [
-            //
+            'codigo_uf' => $uf->codigo_uf,
+            'nome' => $this->faker->city(),
+            'status' => $this->faker->boolean,
         ];
     }
 }

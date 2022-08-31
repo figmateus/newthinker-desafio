@@ -15,6 +15,11 @@ class UfRepository
         $this->model = new Uf();
     }
 
+    public function findALl()
+    {
+        return $this->model->all();
+    }
+
     public function FilterBySigla($data)
     {
         return Uf::whereSigla($data)->first();
@@ -27,29 +32,24 @@ class UfRepository
 
     public function FilterByCodigoAndName($data)
     {
-        return Uf::whereCodgio_uf($data['codigoUF'])
+        return Uf::whereCodigo_uf($data['codigoUF'])
             ->whereNome($data['nome'])->first();
     }
 
     public function FilterByCodigoNameAndFilter($data)
     {
-        return Uf::whereCodgio_uf($data['codigoUF'])
-            ->whereNome($data['nome'])
-            ->whereSigla($data['sigla'])->first();
+        return Uf::whereHasCodigo_uf($data['codigoUF'])
+            ->whereHasNome($data['nome'])
+            ->whereHasSigla($data['sigla'])->first();
     }
 
-    public function updateUf($codigoUF, $body)
+    public function findByCodigo($codigoUF)
     {
-        $uf = Uf::where('codigo_uf', $codigoUF)->first();
-        if($uf == null){
-            return response()->json(['mensagem' => 'Não foi possível alterar, pois já existe um registro de UF com a mesma sigla cadastrada.'],400);
-        }
+        return Uf::where('codigo_uf', $codigoUF)->first();
+    }
 
-        $uf->sigla = $body['sigla'];
-        $uf->nome = $body['nome'];
-        $uf->status = $body['status'];
-        $uf->save();
-
-        return response()->json($uf);
+    public function create($data)
+    {
+        return $this->model->create($data);
     }
 }

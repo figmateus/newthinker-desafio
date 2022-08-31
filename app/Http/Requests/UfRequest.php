@@ -3,7 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 class UfRequest extends FormRequest
 {
     /**
@@ -13,7 +14,7 @@ class UfRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,15 @@ class UfRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+//            'codigo_uf' => 'required',
+            'sigla' => 'required|unique:tb_uf|string|min:2|max:2',
+            'nome' => 'required|unique:tb_uf|min:3|string',
+            'status' => 'required',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['mensagem' => $validator->errors()], 422));
     }
 }

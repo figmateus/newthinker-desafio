@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Uf extends Model
 {
@@ -17,4 +18,9 @@ class Uf extends Model
         'nome',
         'status',
     ];
+
+    public function municipio():HasMany
+    {
+        return $this->hasMany(Municipio::class);
+    }
 }

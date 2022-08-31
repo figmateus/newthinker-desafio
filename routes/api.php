@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UfController;
+use App\Http\Controllers\{UfController, MunicipioController};
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('uf', [UfController::class, 'index']);
 Route::post('uf',[UfController::class, 'store']);
 Route::put('uf/{codigoUF}', [UfController::class, 'update']);
+Route::get('municipio',[MunicipioController::class, 'index']);

@@ -17,10 +17,10 @@ class UfFactory extends Factory
     public function definition()
     {
         return [
-            'codigo_uf'=>$this->faker->randomNumber(2),
+//            'codigo_uf'=>$this->faker->randomNumber(2),
             'sigla' => $this->faker->stateAbbr(),
             'nome'=>$this->faker->state(),
-            'status'=>$this->faker->boolean,
+            'status'=>$this->faker->numberBetween(1,2),
         ];
     }
 }

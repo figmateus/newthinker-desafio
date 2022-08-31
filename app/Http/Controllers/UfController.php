@@ -1,70 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\UfRequest;
 use App\Models\Uf;
 use App\Repositories\UfRepository;
+use App\Services\UfService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UfController
 {
     public $repository;
-    public function __construct(Private Uf $uf, UfRepository $repository)
+    public $service;
+    public function __construct(Private Uf $uf,UfService $service, UfRepository $repository)
     {
+        $this->service = $service;
         $this->repository = $repository;
     }
 
     public function index(Request $request){
-        if(!$request->has('sigla') &&
-            !$request->has('codigoUF') &&
-            !$request->has('nome'))
-        {
-            return response()->json($this->uf->all());
-        }
-
-        if($request->has('sigla')){
-            $sigla = $this->repository->FilterBySigla($request->sigla);
-
-            if($sigla == null){
-               return response()->json([]);
-            }
-
-           return $sigla;
-        }
-
-        if($request->has('nome')){
-            $uf = $this->repository->FilterByName($request->nome);
-
-            if($uf == null){
-                return response()->json([]);
-            }
-
-            return $uf;
-        }
-
-        if($request->has('codigoUF') &&
-        $request->has('nome')){
-            $uf = $this->repository->FilterByCodigoAndName($request->all());
-
-            if($uf == null){
-                return response()->json([]);
-            }
-
-            return $uf;
-        }
-
-        if($request->has('codigoUF') &&
-            $request->has('nome') &&
-            $request->has('sigla')){
-
-            $uf = $this->repository->FilterByCodigoNameAndFilter($request->all());
-
-            if($uf == null){
-                return response()->json([]);
-            }
-
-            return $uf;
-        }
+        $response = $this->service->filterUf($request->all());
+        return $response;
     }
 
     public function show(int $id)
@@ -76,15 +32,13 @@ class UfController
         return response()->json($uf);
     }
 
-    public function store(Request $request)
+    public function store(UfRequest $request)
     {
-        $uf = $this->uf->create($request->all());
-
-        return response()->json($uf, 201);
+        return $this->service->create($request->all());
     }
 
     public function update($codigoUF, Request $request)
     {
-        return $this->repository->updateUf($codigoUF, $request->all());
+        return $this->service->update($codigoUF, $request->all());
     }
 }

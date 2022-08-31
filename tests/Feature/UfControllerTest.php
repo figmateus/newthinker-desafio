@@ -12,8 +12,8 @@ class UfControllerTest extends TestCase
     use RefreshDatabase;
     public function testGetUfEndpointWithoutFilter()
     {
-        $ufs = Uf::factory(1)->create();
-
+        $ufs = Uf::factory(3)->create();
+//        dd($ufs);
         $response = $this->getJson('/api/uf');
 
         $response->assertStatus(200);
@@ -26,14 +26,14 @@ class UfControllerTest extends TestCase
                '0.codigo_uf' => 'integer',
                '0.sigla'=>'string',
                '0.nome'=>'string',
-               '0.status'=>'boolean',
+               '0.status'=> 'integer',
            ]);
-            $uf = $ufs->first();
+
             $json->whereAll([
-                '0.codigo_uf' => $uf->codigo_uf,
-                '0.sigla'=> $uf->sigla,
-                '0.nome'=> $uf->nome,
-                '0.status' => $uf->status,
+                '0.codigo_uf' => $ufs[0]->codigo_uf,
+                '0.sigla'=> $ufs[0]->sigla,
+                '0.nome'=> $ufs[0]->nome,
+                '0.status' => $ufs[0]->status,
             ]);
         });
     }
@@ -41,6 +41,7 @@ class UfControllerTest extends TestCase
     public function testGetUfEndpointShouldReturnEmptyJsonWhenDontFoundUf()
     {
         $response = $this->getJson('/api/uf?nome=IT');
+        $response->assertStatus(404);
         $response->assertJson([]);
     }
 
@@ -59,7 +60,7 @@ class UfControllerTest extends TestCase
                 'codigo_uf' => 'integer',
                 'sigla'=>'string',
                 'nome'=>'string',
-                'status'=>'boolean',
+                'status'=>'integer',
             ]);
 
             $json->whereAll([
@@ -86,7 +87,7 @@ class UfControllerTest extends TestCase
                 'codigo_uf' => 'integer',
                 'sigla'=>'string',
                 'nome'=>'string',
-                'status'=>'boolean',
+                'status'=>'integer',
             ]);
 
             $json->whereAll([
@@ -113,7 +114,7 @@ class UfControllerTest extends TestCase
                 'codigo_uf' => 'integer',
                 'sigla'=>'string',
                 'nome'=>'string',
-                'status'=>'boolean',
+                'status'=>'integer',
             ]);
 
             $json->whereAll([
@@ -186,5 +187,25 @@ class UfControllerTest extends TestCase
         $response->assertStatus(400);
 
         $response->assertJson(['mensagem' => 'Não foi possível alterar, pois já existe um registro de UF com a mesma sigla cadastrada.']);
+    }
+
+    public function testPostUfShouldValidateWhenTryCreateAInvalidBook()
+    {
+
+        $uf = [
+            'codigo_uf' => 22,
+            'sigla' => 'A',
+            'nome' => 'AMAZONAS',
+            'status' => 1,
+        ];
+        $response = $this->postJson('/api/uf',$uf);
+
+        $response->assertStatus(422);
+
+        $response->assertJson(function (AssertableJson $json) {
+
+            $json->hasAll(['mensagem']);
+
+        });
     }
 }
