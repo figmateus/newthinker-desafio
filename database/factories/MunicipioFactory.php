@@ -17,12 +17,12 @@ class MunicipioFactory extends Factory
      */
     public function definition()
     {
-        $uf = Uf::factory(1)->create();
+        $uf = Uf::factory(1)->createOne();
 
         return [
             'codigo_uf' => $uf->codigo_uf,
             'nome' => $this->faker->city(),
-            'status' => $this->faker->boolean,
+            'status' => $this->faker->numberBetween(1,2),
         ];
     }
 }

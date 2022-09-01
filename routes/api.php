@@ -23,3 +23,5 @@ Route::get('uf', [UfController::class, 'index']);
 Route::post('uf',[UfController::class, 'store']);
 Route::put('uf/{codigoUF}', [UfController::class, 'update']);
 Route::get('municipio',[MunicipioController::class, 'index']);
+Route::post('municipio',[MunicipioController::class, 'store']);
+Route::put('municipio/{id}',[MunicipioController::class, 'update']);

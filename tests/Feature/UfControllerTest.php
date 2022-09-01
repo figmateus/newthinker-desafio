@@ -133,17 +133,13 @@ class UfControllerTest extends TestCase
         $response = $this->postJson('/api/uf', $uf);
 
         $response->assertStatus(201);
+        $response->assertJson(['mensagem','UF cadastrada com sucesso.']);
 
-        $response->assertJson(function (AssertableJson $json) use ($uf){
-
-            $json->hasAll(['codigo_uf','sigla', 'nome', 'status']);
-
-            $json->whereAll([
-                'sigla'=> $uf['sigla'],
-                'nome'=> $uf['nome'],
-                'status' => $uf['status'],
-            ]);
-        });
+        $this->assertDatabaseHas('tb_uf',[
+            'sigla' => $uf['sigla'],
+            'nome' => $uf['nome'],
+            'status' => $uf['status'],
+        ]);
     }
 
     public function testPutUfEndpoint()
@@ -159,20 +155,24 @@ class UfControllerTest extends TestCase
         $response = $this->putJson('/api/uf/'. $uf->codigo_uf, $payload);
 
         $response->assertStatus(200);
-
+        $this->assertDatabaseHas('tb_uf',[
+            'sigla' => $payload['sigla'],
+            'nome' => $payload['nome'],
+            'status' => $payload['status'],
+        ]);
         $response->assertJson(function (AssertableJson $json) use ($payload){
 
-            $json->hasAll(['codigo_uf', 'sigla', 'nome', 'status']);
+            $json->hasAll(['0.codigo_uf', '0.sigla', '0.nome', '0.status']);
 
             $json->whereAll([
-                'sigla' => $payload['sigla'],
-                'nome' => $payload['nome'],
-                'status' => $payload['status'],
+                '0.sigla' => $payload['sigla'],
+                '0.nome' => $payload['nome'],
+                '0.status' => $payload['status'],
             ]);
         });
     }
 
-    public function testPutUfShouldReturnEmptyJsonWhenDontUpdateUf()
+    public function testPutUfShouldReturnJsonErrorWhenDontFindUf()
     {
         $uf = Uf::factory(1)->createOne();
 
@@ -184,12 +184,12 @@ class UfControllerTest extends TestCase
 
         $response = $this->putJson('/api/uf/4', $payload);
 
-        $response->assertStatus(400);
+        $response->assertStatus(404);
 
-        $response->assertJson(['mensagem' => 'Não foi possível alterar, pois já existe um registro de UF com a mesma sigla cadastrada.']);
+        $response->assertJson(['mensagem' => 'Uf não encontrado na base de dados.']);
     }
 
-    public function testPostUfShouldValidateWhenTryCreateAInvalidBook()
+    public function testPostUfShouldValidateWhenTryCreateAInvalidUf()
     {
 
         $uf = [
@@ -198,6 +198,7 @@ class UfControllerTest extends TestCase
             'nome' => 'AMAZONAS',
             'status' => 1,
         ];
+
         $response = $this->postJson('/api/uf',$uf);
 
         $response->assertStatus(422);

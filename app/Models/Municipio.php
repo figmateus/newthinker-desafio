@@ -14,13 +14,13 @@ class Municipio extends Model
     public $timestamps = false;
     protected $primaryKey = 'codigo_municipio';
     protected $fillable = [
-        'codigoUF',
+        'codigo_uf',
         'nome',
         'status',
     ];
 
     public function Uf(): BelongsTo
     {
-        return $this->belongsTo(Uf::class, 'codigoUF', 'codigo_uf');
+        return $this->belongsTo(Uf::class, 'codigo_uf', 'codigo_uf');
     }
 }

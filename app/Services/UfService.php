@@ -43,14 +43,6 @@ class UfService
             }
             return response()->json($uf,200);
         }
-
-        if(isset($data['codigoUF']) && isset($data['nome']) && isset($data['sigla'])){
-            $uf = $this->repository->FilterByCodigoNameAndFilter($data);
-            if(!$uf){
-                return response()->json([],404);
-            }
-            return response()->json($uf,200);
-        }
     }
 
     public function update($codigoUF, $data)

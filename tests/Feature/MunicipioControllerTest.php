@@ -10,16 +10,10 @@ use App\Models\Municipio;
 class MunicipioControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     public function testGetMunicipioEndpointWithoutFilter()
     {
-
         $municipios = Municipio::factory(3)->create();
-
-//         $municipios = [
-//             'codigo_uf' => '22',
-//             'nome' => 'Vitoria da conquista',
-//             'status' => 1
-//         ];
 
         $response = $this->getJson('/api/municipio');
 
@@ -27,193 +21,246 @@ class MunicipioControllerTest extends TestCase
 
         $response->assertJson(function (AssertableJson $json) use ($municipios) {
 
-            $json->hasAll(['0.codigoMunicipio', '0.codigoUF', '0.nome', '0.status']);
+            $json->hasAll(['0.codigo_municipio', '0.codigo_uf', '0.nome', '0.status']);
 
             $json->whereAllType([
-                '0.codigoMunicipio' => 'integer',
-                '0.codigoUF' => 'integer',
+                '0.codigo_municipio' => 'integer',
+                '0.codigo_uf' => 'integer',
                 '0.nome' => 'string',
-                '0.status' => 'boolean',
+                '0.status' => 'integer',
             ]);
 
             $municipio = $municipios->first();
             $json->whereAll([
-                '0.codigoMunicipio' => $municipio->codigoMunicipio,
-                '0.codigoUF' => $municipio->codigo_uf,
+                '0.codigo_municipio' => $municipio->codigo_municipio,
+                '0.codigo_uf' => $municipio->codigo_uf,
                 '0.nome' => $municipio->nome,
                 '0.status' => $municipio->status,
             ]);
         });
     }
-}
 
-//    public function testGetUfEndpointShouldReturnEmptyJsonWhenDontFoundUf()
-//    {
-//        $response = $this->getJson('/api/uf?nome=IT');
-//        $response->assertJson([]);
-//    }
-//
-//    public function testGetUfEndpointWithFilterByName()
-//    {
-//        $uf = Uf::factory(1)->createOne();
-//
-//        $response = $this->getJson('/api/uf?nome=' . $uf->nome);
-//        $response->assertStatus(200);
-//
-//        $response->assertJson(function (AssertableJson $json) use ($uf){
-//
-//            $json->hasAll(['codigo_uf','sigla', 'nome', 'status']);
-//
-//            $json->whereAllType([
-//                'codigo_uf' => 'integer',
-//                'sigla'=>'string',
-//                'nome'=>'string',
-//                'status'=>'boolean',
-//            ]);
-//
-//            $json->whereAll([
-//                'codigo_uf' => $uf->codigo_uf,
-//                'sigla'=> $uf->sigla,
-//                'nome'=> $uf->nome,
-//                'status' => $uf->status,
-//            ]);
-//        });
-//    }
-//
-//    public function testGetUfEndpointWithFilterBySigla()
-//    {
-//        $uf = Uf::factory(1)->createOne();
-//
-//        $response = $this->getJson('/api/uf?sigla=' . $uf->sigla);
-//        $response->assertStatus(200);
-//
-//        $response->assertJson(function (AssertableJson $json) use ($uf){
-//
-//            $json->hasAll(['codigo_uf','sigla', 'nome', 'status']);
-//
-//            $json->whereAllType([
-//                'codigo_uf' => 'integer',
-//                'sigla'=>'string',
-//                'nome'=>'string',
-//                'status'=>'boolean',
-//            ]);
-//
-//            $json->whereAll([
-//                'codigo_uf' => $uf->codigo_uf,
-//                'sigla'=> $uf->sigla,
-//                'nome'=> $uf->nome,
-//                'status' => $uf->status,
-//            ]);
-//        });
-//    }
-//
-//    public function testGetUfEndpointWithFilterByCodigoAndName()
-//    {
-//        $uf = Uf::factory(1)->createOne();
-//
-//        $response = $this->getJson('/api/uf?codigoUF='.$uf->codigo_uf.'&nome='.$uf->nome);
-//        $response->assertStatus(200);
-//
-//        $response->assertJson(function (AssertableJson $json) use ($uf){
-//
-//            $json->hasAll(['codigo_uf','sigla', 'nome', 'status']);
-//
-//            $json->whereAllType([
-//                'codigo_uf' => 'integer',
-//                'sigla'=>'string',
-//                'nome'=>'string',
-//                'status'=>'boolean',
-//            ]);
-//
-//            $json->whereAll([
-//                'codigo_uf' => $uf->codigo_uf,
-//                'sigla'=> $uf->sigla,
-//                'nome'=> $uf->nome,
-//                'status' => $uf->status,
-//            ]);
-//        });
-//    }
-//
-//    public function testPostUfEndpoint()
-//    {
-//        $uf = Uf::factory(1)->makeOne()->toArray();
-//
-//        $response = $this->postJson('/api/uf', $uf);
-//
-//        $response->assertStatus(201);
-//
-//        $response->assertJson(function (AssertableJson $json) use ($uf){
-//
-//            $json->hasAll(['codigo_uf','sigla', 'nome', 'status']);
-//
-//            $json->whereAll([
-//                'sigla'=> $uf['sigla'],
-//                'nome'=> $uf['nome'],
-//                'status' => $uf['status'],
-//            ]);
-//        });
-//    }
-//
-//    public function testPutUfEndpoint()
-//    {
-//        $uf = Uf::factory(1)->createOne();
-//
-//        $payload = [
-//            'sigla' => "BA",
-//            'nome' =>"BAHIA UPDATE",
-//            'status' => 1
-//        ];
-//
-//        $response = $this->putJson('/api/uf/'. $uf->codigo_uf, $payload);
-//
-//        $response->assertStatus(200);
-//
-//        $response->assertJson(function (AssertableJson $json) use ($payload){
-//
-//            $json->hasAll(['codigo_uf', 'sigla', 'nome', 'status']);
-//
-//            $json->whereAll([
-//                'sigla' => $payload['sigla'],
-//                'nome' => $payload['nome'],
-//                'status' => $payload['status'],
-//            ]);
-//        });
-//    }
-//
-//    public function testPutUfShouldReturnEmptyJsonWhenDontUpdateUf()
-//    {
-//        $uf = Uf::factory(1)->createOne();
-//
-//        $payload = [
-//            'sigla' => "BA",
-//            'nome' =>"BAHIA UPDATE",
-//            'status' => 1
-//        ];
-//
-//        $response = $this->putJson('/api/uf/4', $payload);
-//
-//        $response->assertStatus(400);
-//
-//        $response->assertJson(['mensagem' => 'Não foi possível alterar, pois já existe um registro de UF com a mesma sigla cadastrada.']);
-//    }
-//
-//    public function testPostUfShouldValidateWhenTryCreateAInvalidBook()
-//    {
-//
-//        $uf = [
-//            'codigo_uf' => 22,
-//            'sigla' => 'A',
-//            'nome' => 'AMAZONAS',
-//            'status' => 1,
-//        ];
-//        $response = $this->postJson('/api/uf',$uf);
-//
-//        $response->assertStatus(422);
-//
-//        $response->assertJson(function (AssertableJson $json) {
-//
-//            $json->hasAll(['mensagem']);
-//
-//        });
-//    }
-//}
+    public function testGetMunicipioEndpointShouldReturnEmptyJsonWhenDontFoundMunicipio()
+    {
+        $response = $this->getJson('/api/municipio?nome=MunicipioNulo');
+        $response->assertStatus(404);
+        $response->assertJson([]);
+    }
+
+    public function testGetMunicipioEndpointShouldFilterByCodigoUfCodigoMunicipioAndNome()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+        $response = $this->getJson('/api/municipio?codigoUF='.$municipio->codigo_uf.'&codigoMunicipio='.$municipio->codigo_municipio.'&nome='.$municipio->nome);
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($municipio) {
+
+            $json->hasAll(['codigo_municipio', 'codigo_uf', 'nome', 'status']);
+
+            $json->whereAllType([
+                'codigo_municipio' => 'integer',
+                'codigo_uf' => 'integer',
+                'nome' => 'string',
+                'status' => 'integer',
+            ]);
+
+            $json->whereAll([
+                'codigo_municipio' => $municipio->codigo_municipio,
+                'codigo_uf' => $municipio->codigo_uf,
+                'nome' => $municipio->nome,
+                'status' => $municipio->status,
+            ]);
+        });
+    }
+    public function testGetMunicipioEndpointWithFilterByName()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+        $response = $this->getJson('/api/municipio?nome=' . $municipio->nome);
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($municipio) {
+
+            $json->hasAll(['codigo_municipio', 'codigo_uf', 'nome', 'status']);
+
+            $json->whereAllType([
+                'codigo_municipio' => 'integer',
+                'codigo_uf' => 'integer',
+                'nome' => 'string',
+                'status' => 'integer',
+            ]);
+
+            $json->whereAll([
+                'codigo_municipio' => $municipio->codigo_municipio,
+                'codigo_uf' => $municipio->codigo_uf,
+                'nome' => $municipio->nome,
+                'status' => $municipio->status,
+            ]);
+        });
+    }
+
+    public function testGetMunicipioEndpointWithFilterByCodigo()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+
+        $response = $this->getJson('/api/municipio?codigoMunicipio=' . $municipio->codigo_municipio);
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($municipio) {
+
+            $json->hasAll(['codigo_municipio', 'codigo_uf', 'nome', 'status']);
+
+            $json->whereAllType([
+                'codigo_uf' => 'integer',
+                'codigo_municipio' => 'integer',
+                'nome' => 'string',
+                'status' => 'integer',
+            ]);
+
+            $json->whereAll([
+                'codigo_uf' => $municipio->codigo_uf,
+                'codigo_municipio' => $municipio->codigo_municipio,
+                'nome' => $municipio->nome,
+                'status' => $municipio->status,
+            ]);
+        });
+    }
+
+    public function testGetMunicipioEndpointWithFilterByStatus()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+
+        $response = $this->getJson('/api/municipio?status=' . $municipio->status);
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($municipio) {
+
+            $json->hasAll(['0.codigo_municipio', '0.codigo_uf', '0.nome', '0.status']);
+
+            $json->whereAllType([
+                '0.codigo_uf' => 'integer',
+                '0.codigo_municipio' => 'integer',
+                '0.nome' => 'string',
+                '0.status' => 'integer',
+            ]);
+
+            $json->whereAll([
+                '0.codigo_uf' => $municipio->codigo_uf,
+                '0.codigo_municipio' => $municipio->codigo_municipio,
+                '0.nome' => $municipio->nome,
+                '0.status' => $municipio->status,
+            ]);
+        });
+    }
+
+    public function testGetMunicipioEndpointWithFilterByCodigoAndName()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+
+        $response = $this->getJson('/api/municipio?codigoMunicipio=' . $municipio->codigo_municipio . '&nome=' . $municipio->nome);
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($municipio) {
+
+            $json->hasAll(['codigo_municipio', 'codigo_uf', 'nome', 'status']);
+
+            $json->whereAllType([
+                'codigo_municipio' => 'integer',
+                'codigo_uf' => 'integer',
+                'nome' => 'string',
+                'status' => 'integer',
+            ]);
+
+            $json->whereAll([
+                'codigo_municipio' => $municipio->codigo_municipio,
+                'codigo_uf' => $municipio->codigo_uf,
+                'nome' => $municipio->nome,
+                'status' => $municipio->status,
+            ]);
+        });
+    }
+
+    public function testPostMunicipioEndpoint()
+    {
+        $municipio = Municipio::factory(1)->makeOne()->toArray();
+
+        $response = $this->postJson('/api/municipio', $municipio);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tb_municipio', [
+            'codigo_uf' => $municipio['codigo_uf'],
+            'nome' => $municipio['nome'],
+            'status' => $municipio['status'],
+        ]);
+
+        $response->assertJson(['mensagem', 'Municipio cadastrada com sucesso.']);
+    }
+
+    public function testPutMunicipioEndpoint()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+
+        $payload = [
+            'codigo_uf' => $municipio->codigo_uf,
+            'nome' =>"Itapetinga",
+            'status' => 1
+        ];
+
+        $response = $this->putJson('/api/municipio/'. $municipio->codigo_municipio, $payload);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('tb_municipio',[
+            'codigo_uf' => $payload['codigo_uf'],
+            'nome' => $payload['nome'],
+            'status' => $payload['status'],
+        ]);
+        $response->assertJson(function (AssertableJson $json) use ($payload){
+
+            $json->hasAll(['0.codigo_uf', '0.codigo_municipio', '0.nome', '0.status']);
+
+            $json->whereAll([
+                '0.codigo_uf' => $payload['codigo_uf'],
+                '0.nome' => $payload['nome'],
+                '0.status' => $payload['status'],
+            ]);
+        });
+    }
+
+    public function testPutMunicipioShouldReturnErrorWhenDontFindMunicipio()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+
+        $payload = [
+            'codigo_uf' => $municipio->codigo_uf,
+            'nome' =>"Itapetinga",
+            'status' => 1
+        ];
+
+        $response = $this->putJson('/api/municipio/999', $payload);
+
+        $response->assertStatus(404);
+
+        $response->assertJson(['mensagem' => 'Municipio não encontrado na base de dados.']);
+    }
+
+    public function testPostMunicipioShouldValidateWhenTryCreateAInvalidMunicipio()
+    {
+        $municipio = Municipio::factory(1)->createOne();
+
+        $payload = [
+            'codigo_uf' => $municipio->codigo_uf,
+            'nome' => '',
+            'status' => 1,
+        ];
+        $response = $this->postJson('/api/municipio',$payload);
+
+        $response->assertStatus(422);
+
+        $response->assertJson(function (AssertableJson $json) {
+
+            $json->hasAll(['mensagem']);
+
+        });
+    }
+}

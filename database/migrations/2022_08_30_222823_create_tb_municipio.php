@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tb_municipio', function (Blueprint $table) {
-            $table->unsignedBigInteger('codigo_municipio');
+            $table->id('codigo_municipio');
             $table->integer('codigo_uf');
             $table->string('nome');
-            $table->boolean('status');
+            $table->smallInteger('status');
             $table->foreign('codigo_uf')->references('codigo_uf')->on('tb_uf');
         });
     }
