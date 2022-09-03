@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{UfController, MunicipioController, BairroController};
+use App\Http\Controllers\{UfController, MunicipioController, BairroController,PessoaController};
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +28,5 @@ Route::put('municipio/{id}',[MunicipioController::class, 'update']);
 Route::get('bairro',[BairroController::class, 'index']);
 Route::post('bairro',[BairroController::class, 'store']);
 Route::put('bairro/{id}',[BairroController::class, 'update']);
+Route::get('pessoa',[PessoaController::class, 'index']);
+Route::post('pessoa',[PessoaController::class, 'store']);

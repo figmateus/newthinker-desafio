@@ -28,7 +28,7 @@ class MunicipioRequest extends FormRequest
         return [
             'codigo_uf' => 'required|numeric',
             'nome' => 'required|string|min:3|unique:tb_municipio',
-            'status' => 'required|numeric'
+            "status" => 'required|numeric|digits_between:1,2'
         ];
     }
 

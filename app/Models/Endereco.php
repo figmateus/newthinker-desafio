@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 class Endereco extends Model
 {
     use HasFactory;
@@ -24,5 +25,10 @@ class Endereco extends Model
     public function Pessoa(): BelongsTo
     {
         return $this->belongsTo(Pessoa::class, 'codigo_pessoa', 'codigo_pessoa');
+    }
+
+    public function bairro(): HasOne
+    {
+        return $this->hasOne(Bairro::class);
     }
 }

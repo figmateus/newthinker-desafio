@@ -16,8 +16,14 @@ class PessoaFactory extends Factory
      */
     public function definition()
     {
+        $senha = strval($this->faker->randomNumber(9));
         return [
-            //
+            'nome' => $this->faker->firstName(),
+            'sobrenome' => $this->faker->lastName(),
+            'idade' => $this->faker->numberBetween(1, 40),
+            'login' => $this->faker->email(),
+            'senha' => $senha,
+            'status' => $this->faker->numberBetween(1,2),
         ];
     }
 }

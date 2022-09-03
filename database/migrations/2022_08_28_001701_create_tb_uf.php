@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('tb_uf', function (Blueprint $table) {
             $table->id('codigo_uf');
-            $table->string('sigla');
-            $table->string('nome');
+            $table->string('sigla',3);
+            $table->string('nome',60);
             $table->smallInteger('status');
         });
     }

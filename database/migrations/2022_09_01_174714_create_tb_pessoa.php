@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('login',50);
             $table->string('senha',50);
             $table->smallInteger('status');
-            $table->timestamps();
         });
     }
 

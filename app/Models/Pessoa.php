@@ -14,6 +14,7 @@ class Pessoa extends Model
     public $timestamps = false;
     protected $primaryKey = 'codigo_pessoa';
     protected $fillable = [
+//        'codigo_pessoa',
         'nome',
         'sobrenome',
         'idade',
@@ -22,8 +23,8 @@ class Pessoa extends Model
         'status',
     ];
 
-    public function endereco(): HasMany
+    public function enderecos(): HasMany
     {
-        return $this->hasMany(Endereco::class);
+        return $this->hasMany(Endereco::class, 'codigo_endereco');
     }
 }
