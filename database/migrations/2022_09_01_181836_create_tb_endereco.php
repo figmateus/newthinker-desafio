@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tb_endereco', function (Blueprint $table) {
-            $table->id('codigo_endereco');
+            $table->string('codigo_endereco')->generatedAs();
             $table->foreignId('codigo_pessoa')->constrained('tb_pessoa', 'codigo_pessoa');
             $table->integer('codigo_bairro');
             $table->string('nome_rua');

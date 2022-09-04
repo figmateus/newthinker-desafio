@@ -24,4 +24,9 @@ class PessoaController extends Controller
     {
         return $this->service->createPessoa($request->all());
     }
+
+    public function update($codigoPessoa, Request $request)
+    {
+        return $this->service->updatePessoa($codigoPessoa, $request->all());
+    }
 }

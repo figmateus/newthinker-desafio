@@ -65,21 +65,74 @@ class PessoaRepository
             ]);
 
             foreach ($data['enderecos'] as $e){
-
-                $pessoa->enderecos()->create([
+                $endereco = Endereco::create([
                     'codigo_pessoa' => $pessoa->codigo_pessoa,
                     'codigo_bairro' => $e['codigoBairro'],
                     'nome_rua' => $e['nomeRua'],
                     'numero' => $e['numero'],
                     'complemento' => $e['complemento'],
-                    'cep' => $e['cep'],
+                    'cep' => $e['cep']
                 ]);
-
+                $pessoa->enderecos()->save($endereco);
+                $pessoa->refresh();
             }
-            return true;
+
+
+        return true;
         }catch (\Exception $e){
            return throw new \Exception($e->getMessage());
         }
 
     }
+
+    public function UpdatePessoa($codigoPessoa, $data)
+    {
+        try{
+            $pessoa = $this->model->with('enderecos')->find($codigoPessoa);
+
+            foreach ($data['enderecos'] as $endereco){
+                foreach ($pessoa->enderecos as $e) {
+                    if(!isset($endereco->codigoEndereco)){
+                        $pessoa->enderecos()->saveMany([
+                            new Endereco([
+                                'codigo_pessoa' => $pessoa->codigo_pessoa,
+                                'codigo_bairro' => $endereco['codigoBairro'],
+                                'nome_rua' => $endereco['nomeRua'],
+                                'numero' => $endereco['numero'],
+                                'complemento' => $endereco['complemento'],
+                                'cep' => $endereco['cep']
+
+                            ]),
+                        ]);
+                    }
+                    if (isset($endereco['codigoEndereco']) &&
+                        $endereco['codigoEndereco'] == $e->codigo_endereco) {
+                        continue;
+                    }else{
+                        $e->delete();
+                    }
+//                    $pessoa->enderecos()->Create([
+//                        'codigo_endereco' => $endereco['codigoEndereco'],
+//                        'codigo_pessoa' => $endereco['codigoPessoa'],
+//                        'codigo_bairro' => $endereco['codigoBairro'],
+//                        'nome_rua' => $endereco['nomeRua'],
+//                        'numero' => $endereco['numero'],
+//                        'complemento' => $endereco['complemento'],
+//                        'cep' => $endereco['cep'],
+//                    ]);
+                }
+
+
+            }
+        }catch (\Exception $e){
+            return throw new \Exception($e->getMessage());
+        }
+
+
+    }
+//        }
+//        try{
+//            $pessoa->nome
+//        }
+//        dd($pessoa);
 }

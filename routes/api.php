@@ -30,3 +30,4 @@ Route::post('bairro',[BairroController::class, 'store']);
 Route::put('bairro/{id}',[BairroController::class, 'update']);
 Route::get('pessoa',[PessoaController::class, 'index']);
 Route::post('pessoa',[PessoaController::class, 'store']);
+Route::put('pessoa/{id}',[PessoaController::class, 'update']);

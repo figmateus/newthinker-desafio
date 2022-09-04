@@ -72,4 +72,14 @@ class PessoaService
         }
         return response()->json(['mensagem'=> $response]);
     }
+
+    public function updatePessoa($codigoPessoa, $data)
+    {
+        $response = $this->Repository->UpdatePessoa($codigoPessoa, $data);
+        return response()->json(['mensagem' => $response]);
+//        if($response === true) {
+//            return $this->Repository->findAll();
+//        }
+//        return response()->json(['mensagem' => 'Não foi possivel alterar a Pessoa.'],503);
+    }
 }

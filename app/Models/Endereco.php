@@ -13,13 +13,15 @@ class Endereco extends Model
     protected $table = 'tb_endereco';
     public $timestamps = false;
     protected $primaryKey = 'codigo_endereco';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'codigo_pessoa',
         'codigo_bairro',
         'nome_rua',
         'numero',
         'complemento',
-        'cep',
+        'cep'
     ];
 
     public function Pessoa(): BelongsTo
